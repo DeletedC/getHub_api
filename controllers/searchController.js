@@ -1,4 +1,5 @@
 const searchRouter = require('express').Router();
+const axios = require('axios');
 
 ///////////////////////////////////////
 // ROUTES
@@ -8,8 +9,9 @@ searchRouter.get('/', async (req, res) => {
     // OMDB
     try {
         const { query } = req.body;
-        const result = await fetch(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&s=${query}`);
-        res.json(result);
+        const result = await axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&s=${query}`);
+        console.log(result.data.Search);
+        res.send(result.data.Search);
     } catch (error) {
         console.log(error);
         res.send('Sorry, the request failed.');

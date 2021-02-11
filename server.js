@@ -32,6 +32,7 @@ const searchController = require('./controllers/searchController');
 // MIDDLEWARE
 ///////////////////////////////////////
 app.use(cors(corsOptions));
+app.use(express.json());
 
 app.use('/search', searchController);
 
