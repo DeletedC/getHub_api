@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 const cors = require('cors');
 require('dotenv').config();
@@ -23,9 +23,17 @@ const corsOptions = {
 };
 
 ///////////////////////////////////////
+// CONTROLLERS
+///////////////////////////////////////
+
+const searchController = require('./controllers/searchController');
+
+///////////////////////////////////////
 // MIDDLEWARE
 ///////////////////////////////////////
 app.use(cors(corsOptions));
+
+app.use('/search', searchController);
 
 ///////////////////////////////////////
 // ROUTES
