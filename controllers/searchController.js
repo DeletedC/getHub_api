@@ -5,7 +5,7 @@ const axios = require('axios');
 // ROUTES
 ///////////////////////////////////////
 
-searchRouter.get('/', async (req, res) => {
+searchRouter.post('/', async (req, res) => {
     // OMDB
     try {
         const { query } = req.body;

@@ -10,7 +10,7 @@ require('dotenv').config();
 ///////////////////////////////////////
 
 // List of urls our API will accept calls from
-const whitelist = [];
+const whitelist = ['http://localhost:19006'];
 
 const corsOptions = {
     origin: function (origin, callback) {
