@@ -27,17 +27,26 @@ searchRouter.post('/', async (req, res) => {
 searchRouter.get('/', async (req, res) => {
     // AMAZON 
 
-    let amazonData;
+    let amazonData = [];
     try {
-        await axios.get('https://www.amazon.com')
+        await axios.get('https://www.curtisjwoods.com')
             .then((data) => {
-                const dom = new JSDOM(data);
-                console.log(dom.window.document.querySelectorAll('.a-list-item'));
-                res.send('Hey');
+                // console.log(data.data);
+                const dom = new JSDOM(data.data);
+                // console.log(dom);
+                // console.log(dom.window.document.querySelectorAll('.card-imae'));
+                dom.window.document.querySelectorAll('.card-image > img').forEach(item => {
+                    console.log(item.getAttribute('src'));
+                    amazonData.push(item.getAttribute('src'));
+                    console.log(amazonData);
+                })
+                // console.log(dom.window.document);
+                res.send(amazonData);
             })
     } catch (error) {
         console.log('I blew up.');
         console.log(error);
+        res.send('I blew up.');
     }
 
 })
