@@ -18,6 +18,18 @@ searchRouter.post('/', async (req, res) => {
     }
 });
 
+searchRouter.get('/:id', async (req, res) => {
+    // OMDB, get movie details using IMDB ID
+    console.log(req.params.id);
+    try {
+        const result = await axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&i=${req.params.id}`);
+        console.log(result.data);
+        res.send(result.data);
+    } catch (error) {
+
+    }
+})
+
 
 
 module.exports = searchRouter;
