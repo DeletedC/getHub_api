@@ -18,6 +18,17 @@ searchRouter.post('/', async (req, res) => {
     }
 });
 
-
+searchRouter.post('/:id', async (req, res) => {
+    // OMDB ID
+    try {
+        const { query } = req.body;
+        const result = await axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&i=${query}`);
+        console.log(result.data.Search.imdbID);
+        res.send(result.data.Search.imdbID);
+    } catch (error) {
+        console.log(error);
+        res.send('Sorry, the request failed.');
+    }
+});
 
 module.exports = searchRouter;
