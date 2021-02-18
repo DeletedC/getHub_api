@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 const cors = require('cors');
 require('dotenv').config();
@@ -10,7 +10,7 @@ require('dotenv').config();
 ///////////////////////////////////////
 
 // List of urls our API will accept calls from
-const whitelist = [];
+const whitelist = ['http://localhost:19006'];
 
 const corsOptions = {
     origin: function (origin, callback) {
@@ -23,9 +23,18 @@ const corsOptions = {
 };
 
 ///////////////////////////////////////
+// CONTROLLERS
+///////////////////////////////////////
+
+const searchController = require('./controllers/searchController');
+
+///////////////////////////////////////
 // MIDDLEWARE
 ///////////////////////////////////////
 app.use(cors(corsOptions));
+app.use(express.json());
+
+app.use('/search', searchController);
 
 ///////////////////////////////////////
 // ROUTES
