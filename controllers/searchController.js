@@ -2,6 +2,7 @@ const searchRouter = require('express').Router();
 const axios = require('axios');
 const jsdom = require('jsdom');
 const {JSDOM} = jsdom;
+const puppeteer = require('puppeteer');
 
 ///////////////////////////////////////
 // ROUTES
@@ -26,28 +27,37 @@ searchRouter.post('/', async (req, res) => {
 
 searchRouter.get('/', async (req, res) => {
     // AMAZON 
+    let data;
+    const scrapeMovies = async () => {
 
-    let amazonData = [];
-    try {
-        await axios.get('https://www.curtisjwoods.com')
-            .then((data) => {
-                // console.log(data.data);
-                const dom = new JSDOM(data.data);
-                // console.log(dom);
-                // console.log(dom.window.document.querySelectorAll('.card-imae'));
-                dom.window.document.querySelectorAll('.card-image > img').forEach(item => {
-                    console.log(item.getAttribute('src'));
-                    amazonData.push(item.getAttribute('src'));
-                    console.log(amazonData);
+        const browser = await puppeteer.launch({headless: true})
+        const page = await browser.newPage()
+
+        await page.goto('https://www.amazon.com/gp/video/storefront/')
+            .then(() => console.log('Went to Amazon Prime Storefront.'));
+
+        // await page.waitForTimeout(3000)
+        await page.waitForSelector('.hC3fkr', {visible: true})
+            .then(() => console.log('Waited for selector.'))
+            .then(async () => {
+                data = await page.evaluate(() => {
+                    const movies = document.querySelectorAll('.hC3fkr');
+        
+                    const urls = Array.from(movies).map(item => item.innerHTML);
+        
+                    return urls;
                 })
-                // console.log(dom.window.document);
-                res.send(amazonData);
+                console.log(data);
             })
-    } catch (error) {
-        console.log('I blew up.');
-        console.log(error);
-        res.send('I blew up.');
+            .then(async () => {
+                await browser.close();
+            });
     }
+
+    await scrapeMovies()
+        .then(() => {
+            res.send(data);
+        });
 
 })
 
