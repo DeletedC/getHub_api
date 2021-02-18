@@ -8,17 +8,36 @@ const {JSDOM} = jsdom;
 ///////////////////////////////////////
 
 searchRouter.post('/', async (req, res) => {
+    const { query } = req.body;
+    const allResults = {};
+
     // OMDB
+    // try {
+    //     console.log(`Query from front is ${query}`)
+    //     const result = await axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&s=${query}`);
+    //     console.log('Results from TRY block')
+    //     console.log(result.data.Search);
+    //     res.send(result.data.Search);
+    // } catch (error) {
+    //     console.log(error);
+    //     res.send('Sorry, the request failed.');
+    // }
+
+    // AMAZON
+
     try {
-        const { query } = req.body;
-        console.log(`Query from front is ${query}`)
-        const result = await axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&s=${query}`);
-        console.log('Results from TRY block')
-        console.log(result.data.Search);
-        res.send(result.data.Search);
+        const result = await axios.get(`https://www.amazon.com/s?k=sonic&i=instant-video`)
+            .catch((error) => {
+                console.log('Amazon fetch failed.');
+                console.log(error);
+                res.send('Amazon fetch failed.');
+            })
+
+        const dom = new JSDOM(result);
+        console.log(dom.window.document);
     } catch (error) {
+        console.log('The Amazon attempt blew up.');
         console.log(error);
-        res.send('Sorry, the request failed.');
     }
 
 
