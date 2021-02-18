@@ -30,13 +30,26 @@ searchRouter.get('/', async (req, res) => {
     let data;
     const scrapeMovies = async () => {
 
-        const browser = await puppeteer.launch({headless: true})
-        const page = await browser.newPage()
+        const browser = await puppeteer.launch({headless: true});
+        const page = await browser.newPage();
+        
+        // Make the viewport vertically huge to load more data at once
+        await page.setViewport({
+            width: 640,
+            height: 10000
+        });
 
         await page.goto('https://www.amazon.com/gp/video/storefront/')
             .then(() => console.log('Went to Amazon Prime Storefront.'));
 
-        // await page.waitForTimeout(3000)
+        // While the load more button exists, click it.
+        // When it's gone, pull the data from the dom.
+
+        // while (document.querySelector('[aria-label="Load more videos]') == true) {
+            
+            // FILL IN LOOP LOGIC HERE
+
+        // }
         await page.waitForSelector('.hC3fkr', {visible: true})
             .then(() => console.log('Waited for selector.'))
             .then(async () => {
