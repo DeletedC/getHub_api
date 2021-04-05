@@ -9,9 +9,19 @@ searchRouter.post('/', async (req, res) => {
     // OMDB
     try {
         const { query } = req.body;
-        const result = await axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&s=${query}`);
-        console.log(result.data.Search);
-        res.send(result.data.Search);
+        const queryString = query.toString();
+        
+        const result = await axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&s=${queryString}`);
+
+        if (result.data.Response == 'False') {
+            res.send('no-results');
+        } else {
+            console.log(result.data.Search);
+            console.log(`queryString is ${queryString}`);
+
+            res.send(result.data.Search);
+        }
+        
     } catch (error) {
         console.log(error);
         res.send('Sorry, the request failed.');
